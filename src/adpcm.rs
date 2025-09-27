@@ -100,7 +100,7 @@ pub fn decode_to_wav<P: AsRef<Path>>(
     Ok(())
 }
 
-pub fn encode_from_wav(path: &Path) -> Result<Vec<u8>, Box<dyn Error>> {
+pub fn encode_from_wav(path: &Path, loop_enabled: bool) -> Result<Vec<u8>, Box<dyn Error>> {
     // open wav file
     let mut reader = WavReader::open(path)?;
     let spec = reader.spec();
@@ -116,6 +116,13 @@ pub fn encode_from_wav(path: &Path) -> Result<Vec<u8>, Box<dyn Error>> {
 
     // encode samples
     let samples: Vec<i16> = reader.samples::<i16>().filter_map(Result::ok).collect();
-    let buffer = libpsxav::spu_encode(samples);
+    let loop_start = if loop_enabled { 0 } else { -1 };
+    let buffer = libpsxav::spu_encode(samples, loop_start);
     Ok(buffer)
+}
+
+pub fn detect_loop(buffer: &[u8]) -> bool {
+    let flags1 = buffer.get(1).copied().unwrap_or(0u8);
+    let flags2 = buffer.get(17).copied().unwrap_or(0u8);
+    (flags1 & 0x04 != 0) || (flags2 & 0x04 != 0)
 }

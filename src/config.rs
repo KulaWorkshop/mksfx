@@ -16,6 +16,12 @@ pub struct SoundFile {
     #[serde(default = "default_format", skip_serializing_if = "is_default_format")]
     pub format: args::SoundFormat,
     pub pitch_value: u32,
+    #[serde(
+        rename = "loop",
+        default = "default_loop",
+        skip_serializing_if = "is_default_loop"
+    )]
+    pub loop_enabled: bool,
 }
 
 pub fn write_config(path: &Path, sound_files: Vec<SoundFile>) -> Result<(), Box<dyn Error>> {
@@ -41,4 +47,12 @@ fn default_format() -> args::SoundFormat {
 
 fn is_default_format(f: &args::SoundFormat) -> bool {
     *f == args::SoundFormat::Wav
+}
+
+fn default_loop() -> bool {
+    return false;
+}
+
+fn is_default_loop(f: &bool) -> bool {
+    *f == false
 }

@@ -65,7 +65,7 @@ fn handle_build(input: String, output: String) -> Result<(), Box<dyn Error>> {
 
         let entry_path = config_dir.join(&entry.filename);
         let buffer = if entry.format == args::SoundFormat::Wav {
-            adpcm::encode_from_wav(&entry_path)
+            adpcm::encode_from_wav(&entry_path, entry.loop_enabled)
                 .map_err(|e| format!("invalid wav file - \"{}\"", e))?
         } else {
             fs::read(entry_path)?
@@ -108,7 +108,14 @@ fn handle_extract(
         let output_path = output_dir.join(&sound_filename);
 
         // write audio file
-        println!("{} ({}hz)", &sound_filename, entry.frequency);
+        let loop_enabled = adpcm::detect_loop(&entry.buffer);
+        println!(
+            "{} ({}hz{})",
+            &sound_filename,
+            entry.frequency,
+            if loop_enabled { ", loops" } else { "" }
+        );
+
         if format == args::SoundFormat::Wav {
             adpcm::decode_to_wav(output_path, &entry.buffer, entry.frequency)?;
         } else {
@@ -119,6 +126,7 @@ fn handle_extract(
             filename: sound_filename.clone(),
             pitch_value: entry.pitch_value,
             format,
+            loop_enabled,
         });
     }
 

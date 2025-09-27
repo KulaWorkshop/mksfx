@@ -10,7 +10,7 @@ unsafe extern "C" {
     ) -> c_int;
 }
 
-pub fn spu_encode(samples: Vec<i16>) -> Vec<u8> {
+pub fn spu_encode(samples: Vec<i16>, loop_start: i8) -> Vec<u8> {
     // sample count
     let sample_count = samples.len();
 
@@ -28,7 +28,7 @@ pub fn spu_encode(samples: Vec<i16>) -> Vec<u8> {
             samples.as_ptr(),
             sample_count as c_int,
             output_buffer.as_mut_ptr(),
-            -1 as libc::c_int,
+            loop_start as libc::c_int,
         )
     };
 
