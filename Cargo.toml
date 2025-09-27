@@ -8,7 +8,6 @@ repository = "https://github.com/kulaworkshop/mksfx"
 edition = "2024"
 
 [profile.release]
-strip = true
 lto = true
 codegen-units = 1
 
