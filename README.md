@@ -1,6 +1,6 @@
 <h4 align="center">
     <a href="https://github.com/KulaWorkshop/mksfx/releases">Releases</a> |
-    <a href="https://docs.kula.quest/tools/mksfx">Documentation</a>
+    <a href="https://wiki.kula.quest/tools/mksfx">Documentation</a>
 </h4>
 
 <div align="center">
@@ -30,7 +30,7 @@ The latest pre-compiled binaries are available for download on the [releases pag
 To extract an SFX file, use the **extract** command followed by its path and an output directory:
 
 ```bash
-mksfx extract HIRO.SFX output
+$ mksfx extract "HIRO.SFX" "output"
 ```
 
 This will extract the sound files from the SFX file into a directory, and will also save a **yaml configuration** file in the directory:
@@ -55,7 +55,7 @@ You can make any adjustments to the config file or audio files as you'd like, ju
 To create an SFX file, use the **build** command followed by the path to create it and the path to a config file:
 
 ```bash
-mksfx build CUSTOM.SFX output/build.yaml
+$ mksfx build "CUSTOM.SFX" "output/build.yaml"
 ```
 
 > [!IMPORTANT]
@@ -64,7 +64,7 @@ mksfx build CUSTOM.SFX output/build.yaml
 If you would like to extract the sounds as raw **SPU-ADPCM** files, you can use the `--format raw` flag:
 
 ```bash
-mksfx extract HIRO.SFX output --format raw
+$ mksfx extract "HIRO.SFX" "output" --format raw
 ```
 
 When importing a raw sound, be sure to set `format: raw` in the config file for that sound:
@@ -84,7 +84,7 @@ Only the `ffmpeg` executable is needed for this process.
 The following command will encode an audio file, in this case a `coin.mp3` file as an example, into the required format for mksfx — a **mono** (1 audio channel) **signed 16-bit PCM WAV** file:
 
 ```bash
-ffmpeg -i coin.mp3 -ac 1 -ar 22050 -sample_fmt s16 output_coin.wav
+$ ffmpeg -i "coin.mp3" -ac 1 -ar 22050 -sample_fmt s16 "output_coin.wav"
 ```
 
 This command will also set the sample rate to **22050hz**, so when importing this sound be sure to set the pitch value to **6040**.
